@@ -12,7 +12,7 @@ def download_from_url(url):
     yt = YouTube(url)
 
     title_parts = re.split(' - | – ', yt.title)
-    if len(title_parts) > 1 and title_parts[1].strip().upper() not in ['HARDSTYLE', 'FRENCHCORE', ':RE', '𝗬𝘂𝗿𝗸𝘆𝘂']:
+    if len(title_parts) > 1 and title_parts[1].strip().upper() not in os.getenv("EXCEPTIONS"):
         artist = yt.author  + '; ' +  title_parts[0]
         title = ' - '.join(title_parts[1:])
     else:

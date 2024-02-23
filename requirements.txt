@@ -1,2 +1,4 @@
 pytube
 python-dotenv
+moviepy
+eyed3

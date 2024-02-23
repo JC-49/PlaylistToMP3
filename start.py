@@ -1,18 +1,21 @@
-from pytube import Playlist
 from dotenv import load_dotenv
-import os, re
+import os, urls, download
+import concurrent.futures
 
-def get_last_n_video_urls(playlist_url, n=5):
-    playlist = Playlist(playlist_url)
-    playlist._video_regex = re.compile(r"\"url\":\"(/watch\?v=[\w-]*)")
-    playlist._video_url_from_webpage = lambda x: "https://www.youtube.com" + playlist._js_to_json(x)
-    return [video_url for video_url in playlist.video_urls[:n]]
+def download_url(url):
+    print(f"Downloading {url}")
+    output_path = os.getcwd() + "/output"
+    download.download_from_url(url, output_path)
 
 if __name__ == "__main__":
+    n = 5
     load_dotenv()
     playlist_url = os.getenv("PLAYLIST_URL")
-    last_n_urls = get_last_n_video_urls(playlist_url, 5)
-    print("Last 5 Video URLs:")
-    for url in last_n_urls:
-        print(url)
+    last_n_urls = urls.get_last_n_video_urls(playlist_url, n)
+    print(f"Last {n} Video URLs:")
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        executor.map(download_url, last_n_urls)
+
+    print("Download complete.")
     #input("Press Enter to exit...")

@@ -13,4 +13,4 @@ if __name__ == "__main__":
         executor.map(download.download_from_url, last_n_urls)
 
     print("Download and Conversion complete.")
-    #input("Press Enter to exit...")
+    input("Press Enter to exit...")

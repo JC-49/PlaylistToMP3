@@ -1,10 +1,16 @@
-import os, eyed3, re, tempfile, shutil
+import os, eyed3, re, tempfile, shutil, json
 from pytube import YouTube
 from moviepy.editor import AudioFileClip
 
+def remove_strings_from_title(name):
+    # Remove strings from the title completely
+    remove_strings = os.getenv("REMOVE_STRINGS").split(",")
+    for remove_string in remove_strings:
+        name = name.replace(remove_string, "")
+    return name
+
 def sanitize_filename(filename):
     return re.sub(r'[<>:"/\\|?*]', '', filename)
-
 
 def download_from_url(url):
     output_path = os.getcwd() + "/output"
@@ -12,14 +18,15 @@ def download_from_url(url):
     yt = YouTube(url)
 
     title_parts = re.split(' - | – ', yt.title)
-    if len(title_parts) > 1 and title_parts[1].strip().upper() not in os.getenv("EXCEPTIONS"):
+    # Exceptions from "Artist - Title" format (e.g. "Title - Artist" or other exceptions after " - " regex)
+    if len(title_parts) > 1 and title_parts[1].strip().upper() not in os.getenv("TITLE_EXCEPTIONS").split(","):
         artist = yt.author  + '; ' +  title_parts[0]
-        title = ' - '.join(title_parts[1:])
+        title = remove_strings_from_title(' - '.join(title_parts[1:]))
     else:
         artist = yt.author
-        title = yt.title
+        title = remove_strings_from_title(yt.title)
 
-    sanitized_title = sanitize_filename(yt.title)
+    sanitized_title = sanitize_filename(remove_strings_from_title(yt.title))
     mp3_file = output_path + "/" + sanitized_title + ".mp3"
 
     # Check if the file already exists

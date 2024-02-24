@@ -18,7 +18,8 @@ def convert_to_mp3(video_file, mp3_file):
     audio_clip.write_audiofile(mp3_file)
 
 def download_from_url(url):
-    output_path = os.getcwd() + "/output"
+    #output_path = os.getcwd() + "/output"
+    output_path = os.getenv("OUTPUT_PATH")
     temp_path = tempfile.mkdtemp()
     yt = YouTube(url)
     

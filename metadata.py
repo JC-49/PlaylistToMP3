@@ -5,7 +5,7 @@ import trim
 
 def get_artist_and_title(yt):
     title_parts = re.split(' - | – ', yt.title)
-    if len(title_parts) > 1 and title_parts[1].strip().upper() not in os.getenv("TITLE_EXCEPTIONS").split(","):
+    if len(title_parts) > 1 and title_parts[1].strip() not in os.getenv("TITLE_EXCEPTIONS").split(","):
         artist = yt.author  + '; ' +  title_parts[0]
         title = trim.remove_strings_from_title(' - '.join(title_parts[1:]))
     else:

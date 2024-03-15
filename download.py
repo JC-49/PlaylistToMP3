@@ -28,7 +28,7 @@ def download_from_url(url):
     mp3_file = output_path + "/" + sanitized_title + ".mp3"
 
     if os.path.exists(mp3_file):
-        print(f"File {mp3_file} already exists. Skipping download.")
+        #print(f"File {mp3_file} already exists. Skipping download.")
         return
     else:
         print(f"Downloading: {url} - {yt.title}")

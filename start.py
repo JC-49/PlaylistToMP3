@@ -3,7 +3,6 @@ import os, urls, download
 import concurrent.futures
 
 if __name__ == "__main__":
-    
     load_dotenv()
     mode = os.getenv("MODE")
     playlist_urls = os.getenv("PLAYLIST_URLS")
